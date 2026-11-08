@@ -1,20 +1,8 @@
 # local-transcribe
 
-`local-transcribe` is a local-first audio transcription CLI for Apple Silicon Macs. It runs voice activity detection, spoken language identification, automatic speech recognition, speaker diarization, and semantic chunking on-device through Metal (`transcribe.cpp`), and writes single-line `.transcript.jsonl` files.
+Local-first audio transcription for on Silicone Macs. 
 
-Status: 0.1.0 pre-release. Options and the output schema can change before 1.0.
-
-```console
-$ local-transcribe --plan -d interview.wav
-Analyzing interview.wav ...
-
-Pre-flight plan
-File           Duration  Speech  Languages  Engine / ASR model                         Diarizer
--------------  --------  ------  ---------  -----------------------------------------  ----------
-interview.wav  00:15     00:11   en: 83.0%  local: parakeet-unified-en-0.6b-Q8_0.gguf  Sortformer
-```
-
-Without `--plan`, the CLI writes the transcript next to the input as `interview.wav.transcript.jsonl` and prints a receipt on `stderr` that lists every step that produced it.
+A CLI-tool that includes voice activity detection, language identification, speaker diarization, and semantic chunking. All data remains local and on-device through Metal (`transcribe.cpp`). The output is a `.transcript.jsonl` files.
 
 ## Privacy and sensitive recordings
 
@@ -60,7 +48,8 @@ chmod 600 ~/.config/local-transcribe/.env
 
 If a variable is set in more than one place, the shell environment wins, then the working-directory `.env`, then the global file.
 
-A saved key does not turn on the cloud. `local-transcribe` calls ElevenLabs only when you pass `--engine cloud` or choose `[c]` at an interactive prompt.
+`local-transcribe` calls ElevenLabs only when you pass `--engine cloud` or choose `[c]` at an interactive prompt.
+
 
 ## Features
 
@@ -79,6 +68,22 @@ A saved key does not turn on the cloud. `local-transcribe` calls ElevenLabs only
 
 - **Speaker diarization (`-d`).** Labels words by speaker (`A`, `B`, `C`, ...) using NVIDIA Sortformer 4spk v2.1 locally or Scribe v2 in the cloud.
 - **Semantic chunking.** Groups tokens into sentences and ~300-character paragraph chunks with script-aware spacing, silence re-anchoring, and pause-aware punctuation boundaries. Run `local-transcribe rechunk` to re-segment existing `.transcript.jsonl` files in place.
+
+- **Dry run through `plan`**
+
+The plan flag (`--plan`) performs a dry run, stating the audio duration, speech duration, language(s) detected, ASR model expected, and diarizer. 
+
+```console
+$ local-transcribe --plan -d interview.wav
+Analyzing interview.wav ...
+
+Pre-flight plan
+File           Duration  Speech  Languages  Engine / ASR model                         Diarizer
+-------------  --------  ------  ---------  -----------------------------------------  ----------
+interview.wav  00:15     00:11   en: 83.0%  local: parakeet-unified-en-0.6b-Q8_0.gguf  Sortformer
+```
+
+Without `--plan`, the CLI writes the transcript next to the input as `interview.wav.transcript.jsonl` and prints a receipt on `stderr` that lists every step that produced it.
 
 ## Models
 
