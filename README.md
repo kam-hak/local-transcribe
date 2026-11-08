@@ -1,6 +1,6 @@
 # local-transcribe
 
-Local-first audio transcription for on Silicone Macs. 
+Local-first audio transcription for Apple silicon Macs. 
 
 A CLI-tool that includes voice activity detection, language identification, speaker diarization, and semantic chunking. All data remains local and on-device through Metal (`transcribe.cpp`). The output is a `.transcript.jsonl` files.
 
