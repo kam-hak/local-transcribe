@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-transcribe"
+version = "0.1.0"
+description = "Local-first audio transcription CLI for Apple Silicon: VAD, language ID, ASR, diarization and chunking on Metal"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Kamran Hakiman"}]
+requires-python = ">=3.11"
+keywords = ["transcription", "speech-recognition", "diarization", "apple-silicon", "metal"]
+dependencies = [
+    "httpx",
+    "numpy",
+    "python-dotenv",
+    "transcribe-cpp>=0.4.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[project.urls]
+Repository = "https://github.com/kam-hak/local-transcribe"
+
+[project.scripts]
+local-transcribe = "local_transcribe.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["local_transcribe*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "metal: needs local GGUF models, ffmpeg and sample audio on an Apple Silicon Mac",
+]
+
+[tool.ruff.lint]
+extend-select = ["I"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/local_transcribe/cli.py" = ["BLE001"]
